@@ -32,7 +32,7 @@ import r2rml.engine.R2RMLProcessor;
 public class Main {
 
 	public static void main(String[] args) {
-
+		try { Class.forName("org.sqlite.JDBC").newInstance(); } catch(Exception e) {e.printStackTrace();};
 		try {
 			Configuration configuration = null;
 			if(args.length != 1) {
