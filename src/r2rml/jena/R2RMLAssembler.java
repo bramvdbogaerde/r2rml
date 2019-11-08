@@ -45,7 +45,7 @@ public class R2RMLAssembler extends ModelAssembler {
     @Override
     public Model open(Assembler a, Resource root, Mode mode) {
         logger.info("Processing R2RML Jena Assembler ...");
-        // Get the ja:baseModel
+        // Get the r2rml:baseModel
         Resource rootModel = getUniqueResource(root, ResourceFactory.createProperty(URI + "baseModel"));
         if (rootModel == null) {
             throw new AssemblerException( root, "No r2rml:baseModel specified!");
@@ -61,7 +61,6 @@ public class R2RMLAssembler extends ModelAssembler {
         if (confConnectionURL == null){
             throw new AssemblerException( root, "No r2rml:connectionURL specified!");
         }
-        Model dataModel = ModelFactory.createDefaultModel();
 
         // Run the R2RML processor
         Configuration configuration = new Configuration();
@@ -69,10 +68,9 @@ public class R2RMLAssembler extends ModelAssembler {
         configuration.setConnectionURL(confConnectionURL.getString());
         R2RMLProcessor engine = new R2RMLProcessor(configuration);
         engine.execute();
-        dataModel.add(engine.getDataset().getDefaultModel());
 
         // Add the data model (R2RML processed results) to the base model
-        baseModel.add(dataModel);
+        baseModel.add(engine.getDataset().getDefaultModel());
         return baseModel;
     }
 
